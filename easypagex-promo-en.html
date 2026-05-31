@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EasyPageX — Your Landing Page in Minutes</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --c1: #FF3366;
+    --c2: #FF9F1C;
+    --c3: #2EC4B6;
+    --c4: #7B2FBE;
+    --c5: #00E676;
+    --c6: #FFD700;
+    --dark: #0A0A0F;
+    --light: #FAFAF8;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--dark);
+    color: var(--light);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 16px; height: 16px;
+    background: var(--c5);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    width: 44px; height: 44px;
+    border: 2px solid var(--c5);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s cubic-bezier(.25,.46,.45,.94), width 0.3s, height 0.3s;
+    mix-blend-mode: difference;
+  }
+
+  /* ---- NAV ---- */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid #ffffff12;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, var(--c1), var(--c2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+    cursor: none;
+  }
+  .nav-links { display: flex; gap: 24px; align-items: center; }
+  .nav-links a {
+    color: #ffffffaa;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: color 0.2s;
+    cursor: none;
+  }
+  .nav-links a:hover { color: var(--c5); }
+  .nav-cta {
+    background: linear-gradient(90deg, var(--c1), var(--c2));
+    color: #fff !important;
+    padding: 8px 22px;
+    border-radius: 6px;
+    font-weight: 800 !important;
+  }
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    nav { padding: 14px 20px; }
+  }
+
+  /* ---- HERO ---- */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% -10%, #FF336640 0%, transparent 65%),
+      radial-gradient(ellipse 60% 40% at 90% 80%, #7B2FBE40 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 10% 70%, #2EC4B430 0%, transparent 60%),
+      linear-gradient(160deg, #0D0D1A 0%, #150820 50%, #0A0F1A 100%);
+    padding: 80px 24px;
+  }
+  #hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, #ffffff0d 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: linear-gradient(90deg, var(--c1), var(--c2));
+    color: #fff;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 100px;
+    margin-bottom: 28px;
+    animation: pulse-badge 2s ease-in-out infinite;
+  }
+  @keyframes pulse-badge {
+    0%,100% { box-shadow: 0 0 0 0 #FF336666; }
+    50% { box-shadow: 0 0 0 14px #FF336600; }
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 12vw, 11rem);
+    line-height: 0.9;
+    text-align: center;
+    letter-spacing: 2px;
+  }
+  .hero-title span.grad1 {
+    background: linear-gradient(135deg, var(--c1), var(--c2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+  }
+  .hero-title span.grad2 {
+    background: linear-gradient(135deg, var(--c3), var(--c4));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    font-weight: 600;
+    color: #ffffffbb;
+    text-align: center;
+    max-width: 560px;
+    margin: 24px auto 40px;
+    line-height: 1.7;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--c1), var(--c2));
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 16px 40px;
+    border-radius: 6px;
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: none; cursor: none;
+  }
+  .btn-primary:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 16px 40px #FF336655;
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--light);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 15px 36px;
+    border-radius: 6px;
+    text-decoration: none;
+    border: 2px solid #ffffff30;
+    letter-spacing: 1px;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: none;
+  }
+  .btn-secondary:hover {
+    border-color: var(--c3);
+    transform: translateY(-3px);
+  }
+
+  /* Floating shapes */
+  .shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(1px);
+    animation: float-shape 6s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes float-shape {
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-30px) rotate(180deg); }
+  }
+
+  /* ---- TICKER ---- */
+  .ticker-wrap {
+    background: linear-gradient(90deg, var(--c1), var(--c2), var(--c3), var(--c4), var(--c1));
+    background-size: 400% 100%;
+    animation: gradient-move 8s linear infinite;
+    padding: 14px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  @keyframes gradient-move { 0% { background-position: 0% 50%; } 100% { background-position: 400% 50%; } }
+  .ticker-inner {
+    display: inline-flex;
+    animation: ticker 22s linear infinite;
+  }
+  @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .ticker-item {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #fff;
+    padding: 0 48px;
+  }
+  .ticker-sep { opacity: 0.5; }
+
+  /* ---- SECTIONS COMMON ---- */
+  section { padding: 100px 24px; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    opacity: 0.55;
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 1;
+    margin-bottom: 24px;
+  }
+
+  /* ---- WHY SECTION ---- */
+  #why {
+    background:
+      radial-gradient(ellipse 60% 50% at 10% 50%, rgba(46,196,182,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 90% 20%, rgba(255,51,102,0.15) 0%, transparent 60%),
+      linear-gradient(160deg, #10103A 0%, #0D1F30 50%, #1A0F30 100%);
+  }
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    margin-top: 60px;
+  }
+  .why-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s, background 0.3s;
+    animation: fade-up 0.6s ease both;
+  }
+  .why-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--c3);
+    background: rgba(255,255,255,0.09);
+  }
+  .why-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--card-accent, var(--c1));
+    border-radius: 16px 16px 0 0;
+  }
+  .why-icon { font-size: 2.4rem; margin-bottom: 20px; display: block; }
+  .why-card h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 10px; color: var(--card-accent, var(--c1)); }
+  .why-card p { color: #ffffffaa; line-height: 1.65; font-size: 0.95rem; }
+
+  /* ---- FACTS SECTION ---- */
+  #facts {
+    background:
+      radial-gradient(ellipse 70% 60% at 20% 50%, rgba(123,47,190,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 50%, rgba(255,159,28,0.2) 0%, transparent 60%),
+      linear-gradient(135deg, #1A0830 0%, #0D1020 50%, #201008 100%);
+  }
+  .facts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2px;
+    margin-top: 60px;
+    border: 2px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .fact-cell {
+    padding: 48px 32px;
+    background: rgba(255,255,255,0.04);
+    text-align: center;
+    transition: background 0.3s;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .fact-cell:hover { background: rgba(255,255,255,0.1); }
+  .fact-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    line-height: 1;
+    background: linear-gradient(135deg, var(--c-a), var(--c-b));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+  }
+  .fact-desc {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #ffffffaa;
+    letter-spacing: 0.5px;
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  /* ---- HOW IT WORKS ---- */
+  #how {
+    background:
+      radial-gradient(ellipse 70% 50% at 80% 50%, rgba(46,196,178,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 10% 30%, rgba(255,51,102,0.12) 0%, transparent 50%),
+      linear-gradient(170deg, #0A1020 0%, #08180A 50%, #100818 100%);
+  }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 32px;
+    margin-top: 60px;
+    position: relative;
+  }
+  .step {
+    position: relative;
+    padding: 40px 28px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.05);
+    overflow: hidden;
+    transition: transform 0.3s, background 0.3s;
+  }
+  .step:hover { transform: scale(1.03); background: rgba(255,255,255,0.08); }
+  .step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 7rem;
+    line-height: 1;
+    position: absolute;
+    top: -10px; right: 16px;
+    opacity: 0.08;
+    color: var(--step-col, var(--c2));
+  }
+  .step-icon { font-size: 2rem; margin-bottom: 16px; display: block; position: relative; z-index: 1; }
+  .step h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: 8px; color: var(--step-col, var(--c2)); position: relative; z-index: 1; }
+  .step p { color: #ffffffaa; font-size: 0.9rem; line-height: 1.65; position: relative; z-index: 1; }
+
+  /* ---- SECRET FACTS ---- */
+  #secrets {
+    background:
+      radial-gradient(ellipse 60% 50% at 30% 20%, rgba(255,51,102,0.15) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 50% at 80% 80%, rgba(46,196,182,0.15) 0%, transparent 55%),
+      linear-gradient(150deg, #1A0818 0%, #081828 50%, #180818 100%);
+  }
+  .secrets-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin-top: 60px;
+  }
+  .secret-card {
+    border-radius: 16px;
+    padding: 32px 28px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    border: 1px solid;
+    transition: transform 0.3s;
+  }
+  .secret-card:hover { transform: translateX(6px); }
+  .secret-emoji { font-size: 2rem; flex-shrink: 0; }
+  .secret-card h3 { font-size: 1rem; font-weight: 800; margin-bottom: 6px; }
+  .secret-card p { color: #ffffffaa; font-size: 0.88rem; line-height: 1.6; }
+
+  /* ---- CTA SECTION ---- */
+  #cta {
+    background: linear-gradient(135deg, var(--c4), var(--c1), var(--c2));
+    text-align: center;
+    padding: 120px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  #cta::before {
+    content: 'EASY PAGE X';
+    position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28vw;
+    color: rgba(255,255,255,0.07);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    pointer-events: none;
+    letter-spacing: 4px;
+  }
+  #cta h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    line-height: 1;
+    position: relative; z-index: 1;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.3);
+  }
+  #cta p {
+    font-size: 1.15rem;
+    color: rgba(255,255,255,0.88);
+    max-width: 480px;
+    margin: 20px auto 40px;
+    position: relative; z-index: 1;
+    font-weight: 600;
+  }
+  .btn-cta {
+    background: var(--dark);
+    color: var(--light);
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    padding: 18px 56px;
+    border-radius: 8px;
+    text-decoration: none;
+    position: relative; z-index: 1;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-block;
+    cursor: none;
+    border: none;
+  }
+  .btn-cta:hover {
+    transform: translateY(-4px) scale(1.04);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  /* ---- SOCIAL & CONTACT ---- */
+  #social {
+    background:
+      radial-gradient(ellipse 60% 60% at 50% 0%, rgba(46,196,182,0.2) 0%, transparent 60%),
+      linear-gradient(160deg, #0A1820 0%, #101020 50%, #0A0818 100%);
+    text-align: center;
+    padding: 80px 24px;
+  }
+  .social-links {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 40px;
+  }
+  .social-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 100px;
+    padding: 12px 28px;
+    text-decoration: none;
+    color: var(--light);
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: transform 0.2s, background 0.2s, border-color 0.2s;
+    cursor: none;
+  }
+  .social-link:hover {
+    transform: translateY(-3px);
+    background: rgba(255,255,255,0.12);
+  }
+  .social-link.instagram:hover { border-color: #E1306C; }
+  .social-link.twitter:hover { border-color: #1DA1F2; }
+  .social-link.linkedin:hover { border-color: #0A66C2; }
+  .social-link.email:hover { border-color: var(--c3); }
+  .social-link.web:hover { border-color: var(--c2); }
+  .social-icon {
+    width: 22px; height: 22px;
+    display: inline-block;
+    fill: currentColor;
+  }
+
+  /* ---- FOOTER ---- */
+  footer {
+    background: #050508;
+    padding: 32px 24px;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.35);
+    font-family: 'Space Mono', monospace;
+  }
+  footer a { color: var(--c3); text-decoration: none; }
+
+  /* ---- UTILITIES ---- */
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .highlight { color: var(--c5); }
+  .highlight2 { color: var(--c2); }
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="https://easypagex.github.io/easy/" class="nav-logo" target="_blank">EasyPageX</a>
+  <div class="nav-links">
+    <a href="#why">Why Us</a>
+    <a href="#how">How It Works</a>
+    <a href="#facts">Stats</a>
+    <a href="#cta" class="nav-cta">Get Started →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="shape" style="width:80px;height:80px;background:var(--c1);opacity:0.15;top:15%;left:8%;animation-delay:-1s;animation-duration:7s;border-radius:30% 70% 70% 30%/30% 30% 70% 70%;"></div>
+  <div class="shape" style="width:50px;height:50px;background:var(--c3);opacity:0.2;top:60%;left:6%;animation-delay:-3s;animation-duration:5s;"></div>
+  <div class="shape" style="width:100px;height:100px;background:var(--c2);opacity:0.12;top:20%;right:10%;animation-delay:-2s;animation-duration:8s;border-radius:60% 40% 50% 50%;"></div>
+  <div class="shape" style="width:40px;height:40px;background:var(--c4);opacity:0.22;bottom:25%;right:8%;animation-delay:-4s;animation-duration:6s;border-radius:20% 80%;"></div>
+  <div class="shape" style="width:60px;height:60px;background:var(--c5);opacity:0.14;bottom:15%;left:25%;animation-delay:-1.5s;animation-duration:9s;"></div>
+
+  <div style="text-align:center;position:relative;z-index:1;">
+    <div class="hero-badge">✦ Landing Pages · Fast &amp; Easy ✦</div>
+    <h1 class="hero-title">
+      <span class="grad1">LANDING</span>
+      <span class="grad2">PAGES</span>
+      <span style="display:block;font-size:clamp(1rem,3vw,2.5rem);letter-spacing:8px;color:rgba(255,255,255,0.4);margin-top:8px;font-family:'Bebas Neue',sans-serif;">THAT ACTUALLY CONVERT</span>
+    </h1>
+    <p class="hero-sub">
+      EasyPageX builds your professional landing page in minutes.<br>
+      No code. No hassle. <span class="highlight">Real results from day one.</span>
+    </p>
+    <div class="hero-btns">
+      <a href="https://easypagex.github.io/easy/" target="_blank" class="btn-primary">🚀 Get My Landing Page</a>
+      <a href="#why" class="btn-secondary">Discover More ↓</a>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span class="ticker-item">⚡ Professional Design</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">🎯 Conversion Optimized</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">📱 100% Mobile Responsive</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">💵 Affordable Pricing</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">🚀 Lightning Fast Delivery</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">⚡ Professional Design</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">🎯 Conversion Optimized</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">📱 100% Mobile Responsive</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">💵 Affordable Pricing</span>
+    <span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">🚀 Lightning Fast Delivery</span>
+    <span class="ticker-item ticker-sep">✦</span>
+  </div>
+</div>
+
+<!-- WHY SECTION -->
+<section id="why">
+  <div class="section-inner">
+    <p class="section-label">// why choose easypagex</p>
+    <h2 class="section-title">YOUR BUSINESS'<br><span style="color:var(--c3)">SECRET WEAPON</span></h2>
+
+    <div class="why-grid">
+      <div class="why-card" style="--card-accent:var(--c1);animation-delay:0.1s">
+        <span class="why-icon">⚡</span>
+        <h3>Unmatched Speed</h3>
+        <p>Your landing page ready in record time. No waiting weeks, no agency back-and-forth. Order today, launch tomorrow.</p>
+      </div>
+      <div class="why-card" style="--card-accent:var(--c2);animation-delay:0.2s">
+        <span class="why-icon">🎨</span>
+        <h3>Design That Stops Scrollers</h3>
+        <p>Every landing page is crafted to grab attention from the very first scroll. Modern, bold, and tailored to your brand.</p>
+      </div>
+      <div class="why-card" style="--card-accent:var(--c3);animation-delay:0.3s">
+        <span class="why-icon">💰</span>
+        <h3>Fair, Honest Pricing</h3>
+        <p>Agency-level quality without the agency price tag. EasyPageX delivers professional results that fit any budget.</p>
+      </div>
+      <div class="why-card" style="--card-accent:var(--c4);animation-delay:0.4s">
+        <span class="why-icon">📈</span>
+        <h3>Built for Results</h3>
+        <p>Every section, every button, every word is engineered to turn visitors into customers. Strategy, not just aesthetics.</p>
+      </div>
+      <div class="why-card" style="--card-accent:var(--c5);animation-delay:0.5s">
+        <span class="why-icon">📱</span>
+        <h3>Mobile-First Always</h3>
+        <p>Over 70% of traffic arrives on mobile. Your pages look flawless on every device, every screen size, every time.</p>
+      </div>
+      <div class="why-card" style="--card-accent:var(--c1);animation-delay:0.6s">
+        <span class="why-icon">🔧</span>
+        <h3>Zero Tech Headaches</h3>
+        <p>No coding, no design skills needed. Just tell us what you want — we make it happen. It's really that simple.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FACTS / STATS SECTION -->
+<section id="facts">
+  <div class="section-inner">
+    <p class="section-label">// numbers that matter</p>
+    <h2 class="section-title">THE STATS<br><span style="color:var(--c2)">YOU NEED TO KNOW</span></h2>
+
+    <div class="facts-grid">
+      <div class="fact-cell">
+        <span class="fact-num" style="--c-a:var(--c1);--c-b:var(--c2)">3"</span>
+        <div class="fact-desc">The time you have to capture a visitor's attention before they bounce</div>
+      </div>
+      <div class="fact-cell">
+        <span class="fact-num" style="--c-a:var(--c3);--c-b:var(--c4)">80%</span>
+        <div class="fact-desc">Of businesses without a landing page lose potential customers every single day</div>
+      </div>
+      <div class="fact-cell">
+        <span class="fact-num" style="--c-a:var(--c2);--c-b:var(--c1)">5×</span>
+        <div class="fact-desc">More conversions with a dedicated landing page vs. a generic homepage</div>
+      </div>
+      <div class="fact-cell">
+        <span class="fact-num" style="--c-a:var(--c4);--c-b:var(--c3)">1s</span>
+        <div class="fact-desc">Faster load speed = up to 7% more conversions (Google, 2023)</div>
+      </div>
+      <div class="fact-cell">
+        <span class="fact-num" style="--c-a:var(--c5);--c-b:var(--c3)">↑48%</span>
+        <div class="fact-desc">More leads when your landing page includes quality video or visual elements</div>
+      </div>
+      <div class="fact-cell">
+        <span class="fact-num" style="--c-a:var(--c1);--c-b:var(--c4)">$0</span>
+        <div class="fact-desc">Code required — you need zero technical knowledge to have a pro-level website</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-inner">
+    <p class="section-label">// simple process</p>
+    <h2 class="section-title">SO EASY IT'LL<br><span style="color:var(--c1)">SURPRISE YOU</span></h2>
+
+    <div class="steps">
+      <div class="step" style="--step-col:var(--c1)">
+        <div class="step-num">1</div>
+        <span class="step-icon">💬</span>
+        <h3>Tell Us Your Vision</h3>
+        <p>Share what you sell, who your ideal customer is, and what you want to achieve. The more detail, the better the result.</p>
+      </div>
+      <div class="step" style="--step-col:var(--c2)">
+        <div class="step-num">2</div>
+        <span class="step-icon">✍️</span>
+        <h3>We Design Your Page</h3>
+        <p>Our team creates a custom landing page tailored to your business, fully optimized and built to convert from the start.</p>
+      </div>
+      <div class="step" style="--step-col:var(--c3)">
+        <div class="step-num">3</div>
+        <span class="step-icon">🔍</span>
+        <h3>Review &amp; Approve</h3>
+        <p>See the result before it goes live. Want tweaks? We've got you. Your satisfaction drives everything we do.</p>
+      </div>
+      <div class="step" style="--step-col:var(--c4)">
+        <div class="step-num">4</div>
+        <span class="step-icon">🚀</span>
+        <h3>Launch &amp; Grow</h3>
+        <p>Your landing page goes live and starts capturing customers from day one. No waiting. No complexity. Just results.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECRET FACTS -->
+<section id="secrets">
+  <div class="section-inner">
+    <p class="section-label">// what most people don't tell you</p>
+    <h2 class="section-title">SURPRISING TRUTHS<br><span style="color:var(--c5)">YOU SHOULD KNOW</span></h2>
+
+    <div class="secrets-list">
+      <div class="secret-card" style="background:rgba(255,51,102,0.07);border-color:rgba(255,51,102,0.2);">
+        <span class="secret-emoji">🧠</span>
+        <div>
+          <h3 style="color:var(--c1)">The Brain Decides in 50 Milliseconds</h3>
+          <p>Before reading a single word, your visitor has already formed a visual opinion. Design isn't decoration — it's psychology.</p>
+        </div>
+      </div>
+      <div class="secret-card" style="background:rgba(255,159,28,0.07);border-color:rgba(255,159,28,0.2);">
+        <span class="secret-emoji">🎯</span>
+        <div>
+          <h3 style="color:var(--c2)">One Landing = One Goal</h3>
+          <p>Pages with multiple calls-to-action convert 266% less than those with a single, clear objective. Simplicity sells.</p>
+        </div>
+      </div>
+      <div class="secret-card" style="background:rgba(46,196,182,0.07);border-color:rgba(46,196,182,0.2);">
+        <span class="secret-emoji">📝</span>
+        <div>
+          <h3 style="color:var(--c3)">Copy Matters More Than Design</h3>
+          <p>Copywriting improvements can boost conversions by up to 300%. EasyPageX sweats every word, not just the visuals.</p>
+        </div>
+      </div>
+      <div class="secret-card" style="background:rgba(123,47,190,0.07);border-color:rgba(123,47,190,0.2);">
+        <span class="secret-emoji">📊</span>
+        <div>
+          <h3 style="color:var(--c4)">96% of Visitors Don't Buy</h3>
+          <p>On their first visit. A well-designed landing page captures emails and data to follow up and win them back.</p>
+        </div>
+      </div>
+      <div class="secret-card" style="background:rgba(0,230,118,0.06);border-color:rgba(0,230,118,0.18);">
+        <span class="secret-emoji">🤝</span>
+        <div>
+          <h3 style="color:var(--c5)">Trust Is Built Visually</h3>
+          <p>Testimonials, client logos, and badges can increase conversion rates by up to 34%. We always include them by design.</p>
+        </div>
+      </div>
+      <div class="secret-card" style="background:rgba(255,215,0,0.06);border-color:rgba(255,215,0,0.18);">
+        <span class="secret-emoji">⏱️</span>
+        <div>
+          <h3 style="color:var(--c6)">Urgency Rockets Sales</h3>
+          <p>Landing pages with scarcity or time-limited elements generate up to 148% more clicks. It's behavioral science in action.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <h2>READY FOR<br>MORE CUSTOMERS?</h2>
+  <p>Your competition already has a landing page. Every day without yours is a customer you're giving away.</p>
+  <a href="https://easypagex.github.io/easy/" target="_blank" class="btn-cta">🚀 Get My Landing Page Now</a>
+</section>
+
+<!-- SOCIAL & CONTACT -->
+<section id="social">
+  <div class="section-inner">
+    <p class="section-label">// connect with us</p>
+    <h2 class="section-title" style="font-size:clamp(2rem,5vw,4rem);">WE'RE RIGHT HERE<br><span style="color:var(--c3)">FOR YOU</span></h2>
+    <p style="color:rgba(255,255,255,0.65);max-width:500px;margin:0 auto;font-size:0.95rem;line-height:1.7;">Have questions? Want to know more? Drop us a message — no commitment needed. We reply fast.</p>
+
+    <div class="social-links">
+      <a href="https://easypagex.github.io/easy/" target="_blank" class="social-link web">
+        <svg class="social-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        Official Website
+      </a>
+      <a href="https://instagram.com/easypagex" target="_blank" class="social-link instagram">
+        <svg class="social-icon" viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+        Instagram
+      </a>
+      <a href="https://twitter.com/easypagex" target="_blank" class="social-link twitter">
+        <svg class="social-icon" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        Twitter / X
+      </a>
+      <a href="https://linkedin.com/company/easypagex" target="_blank" class="social-link linkedin">
+        <svg class="social-icon" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+        LinkedIn
+      </a>
+      <a href="mailto:contact@easypagex.com" class="social-link email">
+        <svg class="social-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        Contact Us
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 <a href="https://easypagex.github.io/easy/" target="_blank">EasyPageX</a> · Landing Pages, Fast &amp; Easy · All rights reserved</p>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+
+  function animRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+
+  document.querySelectorAll('a, button, .why-card, .step, .secret-card, .fact-cell').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '30px';
+      cursor.style.height = '30px';
+      ring.style.width = '60px';
+      ring.style.height = '60px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '16px';
+      cursor.style.height = '16px';
+      ring.style.width = '44px';
+      ring.style.height = '44px';
+    });
+  });
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animation = 'fade-up 0.6s ease both';
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.why-card, .step, .secret-card, .fact-cell').forEach(el => {
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
